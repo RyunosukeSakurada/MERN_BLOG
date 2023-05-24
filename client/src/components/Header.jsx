@@ -33,7 +33,7 @@ const Header = () => {
       <div className="flex gap-x-4 items-center">
         {email && (
           <>
-            <Link>
+            <Link to="/write">
               <div className="flex items-center gap-x-1">
                 <button className="flex items-center gap-x-1 border border-zinc-200 hover:border-amber-500 px-4 py-1 rounded">
                   <BsPencilSquare />
