@@ -6,6 +6,10 @@ const PORT = 5000;
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const cookieParser = require('cookie-parser');
+const multer = require('multer');
+const upload = multer({dest: 'upload/'});
+const fs = require('fs');
+const PostModel = require('./models/Post');
 const app = express();
 require("dotenv").config();
 
@@ -74,6 +78,26 @@ app.get('/profile', (req,res) => {
 //logout
 app.post('/logout', (req,res) => {
   res.cookie('token','').json('ok');
+})
+
+
+//write a post
+app.post('/post',upload.single('file'), async (req,res) => {
+  const {originalname,path} = req.file;
+  const parts = originalname.split('.');
+  const ext = parts[parts.length-1];
+  const newPath = path+'.'+ext;
+  fs.renameSync(path, newPath);
+
+  const {title,summary,content} = req.body;
+  const postDoc = await PostModel.create({
+    title,
+    summary,
+    content,
+    cover:newPath
+  })
+
+  res.json(postDoc)
 })
 
 

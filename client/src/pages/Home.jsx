@@ -4,7 +4,6 @@ import PostList from "../components/PostList"
 const Home = () => {
   return (
     <div className="max-w-[1000px] mx-auto p-2">
-      <Header />
       <PostList />
     </div>
   )
