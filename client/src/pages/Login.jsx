@@ -1,7 +1,36 @@
-import { Link } from "react-router-dom"
+import { Link, Navigate } from "react-router-dom"
 import LoginImg from "../assets/login.jpg"
+import { useContext, useState } from "react"
+import { UserContext } from "../context/UserContext";
 
 const Login = () => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [redirect, setRedirect] = useState(false)
+  const {setUserInfo} = useContext(UserContext)
+
+  async function login(e){
+    e.preventDefault();
+    const result = await fetch('http://localhost:5000/login',{
+      method:'POST',
+      body:JSON.stringify({email,password}),
+      headers:{'Content-Type':'application/json'},
+      credentials: 'include',
+    })
+    if(result.ok){
+      result.json().then(userInfo => {
+        setUserInfo(userInfo);
+        setRedirect(true);
+      })
+    }else{
+      alert("Wrong Credentials");
+    }
+  }
+
+  if(redirect){
+    return <Navigate to={'/'} />
+  }
+
   return (
     <div className="flex w-full h-screen items-center">
       <div className="relative hidden md:w-1/2 h-full md:flex md:flex-col">
@@ -25,16 +54,20 @@ const Login = () => {
             <p className="text-sm mb-2">Welcome Back 👋</p>
           </div>
 
-          <form className="w-full flex flex-col">
+          <form className="w-full flex flex-col" onSubmit={login}>
             <input 
               type="email"
               placeholder="email@example.com"
               className="w-full bg-transparent border-b border-black outline-none focus:outline-none py-2 my-4"
+              value={email}
+              onChange={e => setEmail(e.target.value)}
             />
             <input 
               type="password"
               placeholder="enter your password"
               className="w-full bg-transparent border-b border-black outline-none focus:outline-none py-2 my-4"
+              value={password}
+              onChange={e => setPassword(e.target.value)}
             />
 
             <div className="w-full flex items-center mb-8">
