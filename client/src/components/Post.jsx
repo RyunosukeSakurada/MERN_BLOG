@@ -1,10 +1,11 @@
 import {AiOutlineComment, AiOutlineHeart, AiOutlineUser} from "react-icons/ai"
+import {formatISO9075} from "date-fns";
 
-const Post = () => {
+const Post = ({title,summary,content,cover,createdAt,author}) => {
   return (
     <div className="shadow-md p-4 rounded">
       <img 
-        src="https://techcrunch.com/wp-content/uploads/2021/04/electric-battery-getty.jpg?w=430&h=230&crop=1" 
+        src={'http://localhost:5000/'+cover} 
         alt="" 
         className="rounded w-full h-[200px] object-cover"
       />
@@ -14,18 +15,12 @@ const Post = () => {
           <a 
             href="" 
             className="text-sm hover:text-amber-500 cursor-pointer"
-          >
-            Ron
-          </a>
+          >{author.username}</a>
         </div>
-        <span className="text-sm">2023-05-23</span>
+        <span className="text-sm">{formatISO9075(new Date(createdAt))}</span>
       </div>
-      <h2 className="text-lg font-semibold my-3">
-        California urges EPA to approve ban on new gas-powered car sales by 2035
-      </h2>
-      <p className="text-sm text-zinc-500">
-        California is urging the Biden administration to grant approval for its proposal that mandates all new vehicles sold within the state by 2035 to be exclusively electric, hydrogen-powered or plug-in...
-      </p>
+      <h2 className="text-lg font-semibold my-3">{title}</h2>
+      <p className="text-sm text-zinc-500">{summary}</p>
       <div className="flex justify-between border-t border-gray-300 mt-4 pt-2">
         <div className="flex gap-x-1 items-center">
           <AiOutlineHeart />
