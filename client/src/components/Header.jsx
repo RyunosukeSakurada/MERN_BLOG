@@ -25,6 +25,7 @@ const Header = () => {
     setUserInfo(null);
   }
 
+
   const email = userInfo?.email;
 
   return (
@@ -41,12 +42,14 @@ const Header = () => {
                   <BsPencilSquare />
                   <p>Write</p>
                 </button>
-                <button 
-                  onClick={logout}
-                  className="bg-amber-500 hover:bg-amber-600 text-white px-4 py-1 rounded"
-                >
-                  Log out
-                </button>
+                <Link to={"/"}>
+                  <button 
+                    onClick={logout}
+                    className="bg-amber-500 hover:bg-amber-600 text-white px-4 py-1 rounded"
+                  >
+                    Log out
+                  </button>
+                </Link>
               </div>
             </Link>
           </>

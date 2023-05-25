@@ -66,13 +66,20 @@ app.post('/login', async (req,res) => {
 
 
 //profile
-app.get('/profile', (req,res) => {
-  const {token} = req.cookies;
-  jwt.verify(token,secret,{},(e,info) => {
-    if(e) throw e;
+app.get('/profile', (req, res) => {
+  const { token } = req.cookies;
+  if (!token) {
+    return res.status(401).json({ error: 'JWT must be provided' });
+  }
+  
+  jwt.verify(token, secret, {}, (err, info) => {
+    if (err) {
+      return res.status(401).json({ error: 'Invalid JWT' });
+    }
     res.json(info);
   });
 });
+
 
 
 //logout
@@ -82,16 +89,16 @@ app.post('/logout', (req,res) => {
 
 
 //write a post
-app.post('/post',upload.single('file'), async (req,res) => {
+app.post('/post', upload.single('file'), async (req,res) => {
   const {originalname,path} = req.file;
   const parts = originalname.split('.');
-  const ext = parts[parts.length-1];
+  const ext = parts[parts.length - 1];
   const newPath = path+'.'+ext;
   fs.renameSync(path, newPath);
 
   const {token} = req.cookies;
-  jwt.verify(token,secret,{}, async (e,info) => {
-    if(e) throw e;
+  jwt.verify(token, secret, {}, async (err,info) => {
+    if (err) throw err;
     const {title,summary,content} = req.body;
     const postDoc = await Post.create({
       title,
@@ -100,30 +107,99 @@ app.post('/post',upload.single('file'), async (req,res) => {
       cover:newPath,
       author:info.id,
     });
-    res.json(postDoc)
+    res.json(postDoc);
   });
-})
 
-
-//get posts
-app.get('/post', async (req,res) => {
-  res.json(
-    await Post.find()
-    .populate('author',['username'])
-    .sort({createdAt: - 1})
-    .limit(20)
-  );
 });
 
 
-//get single post
-app.get('/post/:id', async (req, res) => {
-  const {id} = req.params;
-  const postDoc = await Post.findById(id).populate('author', ['username']);
-  res.json(postDoc);
-})
+//update post 
+app.put('/post', upload.single('file'), async (req, res) => {
+  let newPath = null;
+  if (req.file) {
+    const { originalname, path } = req.file;
+    const parts = originalname.split('.');
+    const ext = parts[parts.length - 1];
+    newPath = path + '.' + ext;
+    fs.renameSync(path, newPath);
+  }
+
+  const { token } = req.cookies;
+  jwt.verify(token, secret, {}, async (e, info) => {
+    if (e) throw e;
+    const { id, title, summary, content } = req.body;
+    const postDoc = await Post.findByIdAndUpdate(
+      id,
+      {
+        title,
+        summary,
+        content,
+        cover: newPath ? newPath : postDoc.cover,
+      },
+      { new: true } 
+    );
+
+    if (!postDoc) {
+      return res.status(400).json('Post not found');
+    }
+
+    const isAuthor = JSON.stringify(postDoc.author) === JSON.stringify(info.id);
+    if (!isAuthor) {
+      return res.status(400).json('You are not the author');
+    }
+
+    res.json(postDoc);
+  });
+});
 
 
+
+  //get posts
+  app.get('/post', async (req,res) => {
+    res.json(
+      await Post.find()
+      .populate('author',['username'])
+      .sort({createdAt: - 1})
+      .limit(20)
+    );
+  });
+
+
+  //get single post
+  app.get('/post/:id', async (req, res) => {
+    const {id} = req.params;
+    const postDoc = await Post.findById(id).populate('author', ['username']);
+    res.json(postDoc);
+  })
+
+  // delete post
+app.delete('/post/:id', async (req, res) => {
+  const { id } = req.params;
+
+  const { token } = req.cookies;
+  jwt.verify(token, secret, {}, async (err, info) => {
+    if (err) throw err;
+
+    try {
+      const postDoc = await Post.findById(id);
+
+      if (!postDoc) {
+        return res.status(400).json('Post not found');
+      }
+
+      const isAuthor = JSON.stringify(postDoc.author) === JSON.stringify(info.id);
+      if (!isAuthor) {
+        return res.status(400).json('You are not the author');
+      }
+
+      await postDoc.remove();
+      res.json('Post deleted successfully');
+    } catch (error) {
+      console.log(error);
+      res.status(500).json('Internal Server Error');
+    }
+  });
+});
 
 app.listen(PORT, () => console.log("Server Started"))
 

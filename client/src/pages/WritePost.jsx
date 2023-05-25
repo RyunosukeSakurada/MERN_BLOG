@@ -1,23 +1,8 @@
 import { useState } from "react"
-import ReactQuill from "react-quill"
+import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css"
 import {Navigate} from "react-router-dom"
-
-const modules = {
-  toolbar: [
-    [{ 'header': [1, 2, false] }],
-    ['bold', 'italic', 'underline','strike', 'blockquote'],
-    [{'list': 'ordered'}, {'list': 'bullet'}, {'indent': '-1'}, {'indent': '+1'}],
-    ['link', 'image'],
-    ['clean']
-  ]
-};
-const formats = [
-    'header',
-    'bold', 'italic', 'underline', 'strike', 'blockquote',
-    'list', 'bullet', 'indent',
-    'link', 'image'
-]
+import Editor from "../components/Editor"
 
 
 const WritePost = () => {
@@ -70,12 +55,7 @@ const WritePost = () => {
         className="p-2 border"
         onChange={e => setFiles(e.target.files)}
       />
-      <ReactQuill 
-        value = {content} 
-        onChange={newValue => setContent(newValue)}
-        modules = {modules} 
-        formats = {formats}
-      />
+      <Editor value={content} onChange={setContent} />
       <button
         className="mt-5 bg-amber-500 hover:bg-amber-600 py-4 text-white rounded text-md font-semibold"
       >
