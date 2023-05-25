@@ -5,6 +5,7 @@ import WritePost from "./pages/WritePost"
 import PostList from "./pages/PostList"
 import {Route,Routes} from "react-router-dom"
 import { UserContextProvider } from "./context/UserContext"
+import PostDetail from "./pages/PostDetail"
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
           <Route path="/" element={<Layout/>}>
             <Route index element={<PostList />}/>
             <Route path="/write" element={<WritePost/>}/>
+            <Route path="/post/:id" element={<PostDetail/>}/>
           </Route>
           <Route path="/login" element={<Login />}/>
           <Route path="/signup" element={<Signup />}/>

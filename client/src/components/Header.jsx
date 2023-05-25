@@ -29,7 +29,9 @@ const Header = () => {
 
   return (
     <header className="py-4 flex items-center justify-between">
-      <h1 className="text-2xl font-semibold"><span className="text-amber-500">B</span>log</h1>
+      <Link to={"/"}>
+        <h1 className="text-2xl font-semibold"><span className="text-amber-500">B</span>log</h1>
+      </Link>
       <div className="flex gap-x-4 items-center">
         {email && (
           <>
