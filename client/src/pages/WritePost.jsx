@@ -38,6 +38,7 @@ const WritePost = () => {
     const result = await fetch('http://localhost:5000/post',{
       method:'POST',
       body: data,
+      credentials: 'include',
     });
     if(result.ok){
       setRedirect(true)
@@ -45,7 +46,7 @@ const WritePost = () => {
   }
 
   if(redirect){
-    return <Navigate to="/"/>
+    return <Navigate to={'/'}/>
   }
 
   return (
