@@ -1,36 +1,39 @@
 import {AiOutlineComment, AiOutlineHeart, AiOutlineUser} from "react-icons/ai"
 import {formatISO9075} from "date-fns";
+import { Link } from "react-router-dom";
 
-const Post = ({title,summary,content,cover,createdAt,author}) => {
+const Post = ({_id,title,summary,content,cover,createdAt,author}) => {
   return (
     <div className="shadow-md p-4 rounded">
-      <img 
-        src={'http://localhost:5000/'+cover} 
-        alt="" 
-        className="rounded w-full h-[200px] object-cover"
-      />
-      <div className="mt-3 flex justify-between">
-        <div className="flex items-center gap-x-1">
-          <AiOutlineUser size={20}/>
-          <a 
-            href="" 
-            className="text-sm hover:text-amber-500 cursor-pointer"
-          >{author.username}</a>
+      <Link to={`/post/${_id}`}>
+        <img 
+          src={'http://localhost:5000/'+cover} 
+          alt="" 
+          className="rounded w-full h-[200px] object-cover"
+        />
+        <div className="mt-3 flex justify-between">
+          <div className="flex items-center gap-x-1">
+            <AiOutlineUser size={20}/>
+            <a 
+              href="" 
+              className="text-sm hover:text-amber-500 cursor-pointer"
+            >{author.username}</a>
+          </div>
+          <span className="text-sm">{formatISO9075(new Date(createdAt))}</span>
         </div>
-        <span className="text-sm">{formatISO9075(new Date(createdAt))}</span>
-      </div>
-      <h2 className="text-lg font-semibold my-3">{title}</h2>
-      <p className="text-sm text-zinc-500">{summary}</p>
-      <div className="flex justify-between border-t border-gray-300 mt-4 pt-2">
-        <div className="flex gap-x-1 items-center">
-          <AiOutlineHeart />
-          <span className="text-sm text-zinc-500">: 5 likes</span>
+        <h2 className="text-lg font-semibold my-3">{title}</h2>
+        <p className="text-sm text-zinc-500">{summary}</p>
+      </Link>
+        <div className="flex justify-between border-t border-gray-300 mt-4 pt-2">
+          <div className="flex gap-x-1 items-center">
+            <AiOutlineHeart />
+            <span className="text-sm text-zinc-500">: 5 likes</span>
+          </div>
+          <div className="flex gap-x-1 items-center">
+            <AiOutlineComment />
+            <span className="text-sm text-zinc-500">: 6 comments</span>
+          </div>
         </div>
-        <div className="flex gap-x-1 items-center">
-          <AiOutlineComment />
-          <span className="text-sm text-zinc-500">: 6 comments</span>
-        </div>
-      </div>
     </div>
   )
 }
