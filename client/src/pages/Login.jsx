@@ -46,7 +46,9 @@ const Login = () => {
       </div>
 
       <div className="md:w-1/2 w-full h-full flex flex-col p-20 justify-between">
-        <h2 className="text-xl font-semibold">BLOG</h2>
+        <Link to={'/'}>
+          <h2 className="text-xl font-semibold hover:text-amber-500 ">BLOG</h2>
+        </Link>
 
         <div className="w-full flex flex-col max-w-[400px] mx-auto">
           <div className="w-full flex flex-col">

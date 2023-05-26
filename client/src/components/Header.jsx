@@ -1,26 +1,26 @@
-import { useContext, useEffect} from "react"
+import { useContext, useEffect } from "react"
 import { Link } from "react-router-dom"
-import {BsPencilSquare} from "react-icons/bs"
+import { BsPencilSquare } from "react-icons/bs"
 import { UserContext } from "../context/UserContext"
 
 const Header = () => {
-  const {setUserInfo, userInfo} = useContext(UserContext)
+  const { setUserInfo, userInfo } = useContext(UserContext)
 
-  useEffect(()=>{
-    fetch('http://localhost:5000/profile',{
+  useEffect(() => {
+    fetch('http://localhost:5000/profile', {
       credentials: 'include',
     }).then(res => {
       res.json().then(userInfo => {
         setUserInfo(userInfo);
       });
     });
-  },[]);
+  }, []);
 
 
-  function logout(){
-    fetch('http://localhost:5000/logout',{
+  function logout() {
+    fetch('http://localhost:5000/logout', {
       credentials: 'include',
-      method:'POST',
+      method: 'POST',
     });
     setUserInfo(null);
   }
@@ -36,22 +36,18 @@ const Header = () => {
       <div className="flex gap-x-4 items-center">
         {email && (
           <>
-            <Link to="/write">
-              <div className="flex items-center gap-x-1">
-                <button className="flex items-center gap-x-1 border border-zinc-200 hover:border-amber-500 px-4 py-1 rounded">
-                  <BsPencilSquare />
-                  <p>Write</p>
-                </button>
-                <Link to={"/"}>
-                  <button 
-                    onClick={logout}
-                    className="bg-amber-500 hover:bg-amber-600 text-white px-4 py-1 rounded"
-                  >
-                    Log out
-                  </button>
-                </Link>
-              </div>
+            <Link to="/write" className="flex items-center gap-x-1">
+              <button className="flex items-center gap-x-1 border border-zinc-200 hover:border-amber-500 px-4 py-1 rounded">
+                <BsPencilSquare />
+                <p>Write</p>
+              </button>
             </Link>
+            <button
+              onClick={logout}
+              className="bg-amber-500 hover:bg-amber-600 text-white px-4 py-1 rounded"
+            >
+              Log out
+            </button>
           </>
         )}
         {!email && (
@@ -62,9 +58,9 @@ const Header = () => {
               </button>
             </Link>
             <Link to="/signup">
-              <button 
+              <button
                 className="bg-amber-500 hover:bg-amber-600 text-white px-4 py-1 rounded"
-                >
+              >
                 Signup
               </button>
             </Link>
@@ -74,4 +70,5 @@ const Header = () => {
     </header>
   )
 }
+
 export default Header
