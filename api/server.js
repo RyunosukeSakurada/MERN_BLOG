@@ -49,7 +49,10 @@ app.post('/signup', async (req,res) => {
 //login api
 app.post('/login', async (req,res) => {
   const {email, password} = req.body;
-  const userDoc = await User.findOne({email});
+  const userDoc = await User.findOne({ email });
+  if (!userDoc) {
+    return res.status(400).json("User not found");
+  }
   const passOk = bcrypt.compareSync(password, userDoc.password);
   if(passOk){
     jwt.sign({email,id:userDoc._id},secret,{},(e,token) => {
@@ -87,29 +90,32 @@ app.post('/logout', (req,res) => {
   res.cookie('token','').json('ok');
 })
 
+// write a post
+app.post('/post', upload.single('file'), async (req, res) => {
+  if (!req.file) {
+    // ファイルがアップロードされていない場合の処理
+    return res.status(400).json({ error: 'No file uploaded' });
+  }
 
-//write a post
-app.post('/post', upload.single('file'), async (req,res) => {
-  const {originalname,path} = req.file;
+  const { originalname, path } = req.file;
   const parts = originalname.split('.');
   const ext = parts[parts.length - 1];
-  const newPath = path+'.'+ext;
+  const newPath = path + '.' + ext;
   fs.renameSync(path, newPath);
 
-  const {token} = req.cookies;
-  jwt.verify(token, secret, {}, async (err,info) => {
+  const { token } = req.cookies;
+  jwt.verify(token, secret, {}, async (err, info) => {
     if (err) throw err;
-    const {title,summary,content} = req.body;
+    const { title, summary, content } = req.body;
     const postDoc = await Post.create({
       title,
       summary,
       content,
-      cover:newPath,
-      author:info.id,
+      cover: newPath,
+      author: info.id,
     });
     res.json(postDoc);
   });
-
 });
 
 
@@ -192,6 +198,63 @@ app.delete('/post/:id', async (req, res) => {
     const postDoc = await Post.findById(id).populate('author', ['username']);
     res.json(postDoc);
   })
+
+
+
+  app.post('/post/:id/comments', async (req, res) => {
+    const { id } = req.params;
+    const { token } = req.cookies;
+  
+    jwt.verify(token, secret, {}, async (err, info) => {
+      if (err) {
+        return res.status(401).json({ error: 'Invalid token' });
+      }
+  
+      const { content } = req.body;
+  
+      try {
+        const postDoc = await Post.findById(id);
+  
+        if (!postDoc) {
+          return res.status(404).json({ error: 'Post not found' });
+        }
+  
+        const comment = {
+          content,
+          author: info.id,
+        };
+  
+        postDoc.comments.push(comment);
+        await postDoc.save();
+  
+        res.json(comment);
+      } catch (error) {
+        res.status(500).json({ error: 'Failed to create comment' });
+      }
+    });
+  });
+
+  // get comments for a post
+  app.get("/post/:id/comments", async (req, res) => {
+    const { id } = req.params;
+  
+    try {
+      const postDoc = await Post.findById(id).populate("comments.author");
+  
+      if (!postDoc) {
+        return res.status(404).json({ error: "Post not found" });
+      }
+  
+      res.json(postDoc.comments);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to retrieve comments" });
+    }
+  });
+
+
+
+
+
 
 
 app.listen(PORT, () => console.log("Server Started"))

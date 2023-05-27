@@ -2,7 +2,7 @@ import {AiOutlineComment, AiOutlineHeart, AiOutlineUser} from "react-icons/ai"
 import {formatISO9075} from "date-fns";
 import { Link } from "react-router-dom";
 
-const Post = ({_id,title,summary,cover,createdAt,author}) => {
+const Post = ({_id,title,summary,cover,createdAt,author,comments}) => {
   return (
     <div className="shadow-md p-4 rounded flex flex-col justify-between">
       <div>
@@ -23,7 +23,7 @@ const Post = ({_id,title,summary,cover,createdAt,author}) => {
             <span className="text-sm">{formatISO9075(new Date(createdAt))}</span>
           </div>
           <h2 className="text-lg font-semibold my-3">{title}</h2>
-          <p className="text-sm text-zinc-500">{summary}</p>
+          <p className="text-sm text-zinc-500 break-words">{summary}</p>
         </Link>
       </div>
       <div className="flex justify-between border-t border-gray-300 mt-4 pt-2">
@@ -33,7 +33,7 @@ const Post = ({_id,title,summary,cover,createdAt,author}) => {
         </div>
         <div className="flex gap-x-1 items-center">
           <AiOutlineComment />
-          <span className="text-sm text-zinc-500">: 6 comments</span>
+          <span className="text-sm text-zinc-500">: {comments.length} comments</span>
         </div>
       </div>
     </div>
