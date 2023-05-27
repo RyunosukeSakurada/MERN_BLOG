@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const {Schema,model} = mongoose;
 
+
 const CommentSchema = new Schema(
   {
     content: String,
@@ -18,6 +19,7 @@ const PostSchema = new Schema({
   cover: String,
   author: { type: Schema.Types.ObjectId, ref: 'User' },
   comments: [CommentSchema],
+  likes: [{ type: Schema.Types.ObjectId, ref: 'User' }],
 }, {
   timestamps: true,
 });
