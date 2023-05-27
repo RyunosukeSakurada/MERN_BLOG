@@ -68,7 +68,6 @@ app.post('/login', async (req,res) => {
 });
 
 
-//profile
 // profile
 app.get('/profile', (req, res) => {
   const { token } = req.cookies;
@@ -253,8 +252,42 @@ app.delete('/post/:id', async (req, res) => {
 
 
 
+  // like post
+app.post('/post/:id/like', async (req, res) => {
+  const { id } = req.params;
+  const { token } = req.cookies;
 
+  jwt.verify(token, secret, {}, async (err, info) => {
+    if (err) {
+      return res.status(401).json({ error: 'Invalid token' });
+    }
 
+    try {
+      const postDoc = await Post.findById(id);
+
+      if (!postDoc) {
+        return res.status(404).json({ error: 'Post not found' });
+      }
+
+      // 既にユーザーがいいねしているか確認する
+      const userLiked = postDoc.likes.some((userId) => userId.equals(info.id));
+
+      if (userLiked) {
+        // 既にいいねしている場合は、いいねを取り消す
+        postDoc.likes.pull(info.id);
+      } else {
+        // いいねを追加する
+        postDoc.likes.push(info.id);
+      }
+
+      await postDoc.save();
+
+      res.json({ likes: postDoc.likes });
+    } catch (error) {
+      res.status(500).json({ error: 'Failed to like post' });
+    }
+  });
+});
 
 
 app.listen(PORT, () => console.log("Server Started"))

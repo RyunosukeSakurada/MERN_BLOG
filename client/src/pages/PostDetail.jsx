@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { formatISO9075 } from "date-fns";
 import { UserContext } from "../context/UserContext";
-import { AiOutlineSend } from "react-icons/ai";
+import { AiOutlineHeart, AiOutlineSend , AiFillHeart} from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
 
 const PostDetail = () => {
@@ -12,6 +12,7 @@ const PostDetail = () => {
   const { userInfo } = useContext(UserContext);
   const { id } = useParams();
   const navigate = useNavigate();
+  const [likes, setLikes] = useState(0);
 
   useEffect(() => {
     fetch(`http://localhost:5000/post/${id}`)
@@ -24,6 +25,7 @@ const PostDetail = () => {
       })
       .then((postInfo) => {
         setPostInfo(postInfo);
+        setLikes(postInfo.likes.length);
       })
       .catch((error) => {
         console.error("Error retrieving post:", error);
@@ -100,6 +102,33 @@ const PostDetail = () => {
       });
   };
 
+
+
+  const handleLike = () => {
+    fetch(`http://localhost:5000/post/${id}/like`, {
+      method: "POST",
+      credentials: "include",
+    })
+      .then((res) => {
+        if (res.ok) {
+          return res.json();
+        } else {
+          throw new Error("Failed to like post");
+        }
+      })
+      .then((data) => {
+        setPostInfo((prevPostInfo) => ({
+          ...prevPostInfo,
+          likes: data.likes,
+        }));
+        setLikes(data.likes.length);
+      })
+      .catch((error) => {
+        console.error("Error liking post:", error);
+      });
+  };
+
+
   if (!postInfo) {
     return (
       <div className="flex justify-center items-center h-screen text-3xl">
@@ -118,7 +147,7 @@ const PostDetail = () => {
           alt=""
           className="w-full h-[300px] object-cover mb-3"
         />
-        <div className="flex items-center justify-between">
+        <div className="md:flex items-center justify-between">
           <div className="flex items-center gap-x-2">
             <span className="text-sm">
               {formatISO9075(new Date(postInfo.createdAt))}
@@ -129,6 +158,16 @@ const PostDetail = () => {
                 {postInfo.author.username}
               </span>
             </p>
+            {email && (
+              <div className="flex gap-x-1 items-center ml-5">
+                {postInfo.likes.includes(userInfo.id) ? (
+                  <AiFillHeart onClick={handleLike} />
+                ) : (
+                  <AiOutlineHeart onClick={handleLike} />
+                )}
+              </div>
+            )}
+            <p>{likes} likes</p>
           </div>
           {userInfo && userInfo.id === postInfo.author._id && (
             <div>
