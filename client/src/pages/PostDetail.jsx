@@ -15,7 +15,7 @@ const PostDetail = () => {
   const [likes, setLikes] = useState(0);
 
   useEffect(() => {
-    fetch(`http://localhost:5000/post/${id}`)
+    fetch(`https://mern-blog-backend-nu.vercel.app/post/${id}`)
       .then((res) => {
         if (res.ok) {
           return res.json();
@@ -31,7 +31,7 @@ const PostDetail = () => {
         console.error("Error retrieving post:", error);
       });
 
-    fetch(`http://localhost:5000/post/${id}/comments`)
+    fetch(`https://mern-blog-backend-nu.vercel.app/post/${id}/comments`)
       .then((res) => {
         if (res.ok) {
           return res.json();
@@ -50,15 +50,15 @@ const PostDetail = () => {
   }, [id]);
 
   const handleDelete = () => {
-    fetch(`http://localhost:5000/post/${id}`, {
+    fetch(`https://mern-blog-backend-nu.vercel.app/post/${id}`, {
       method: "DELETE",
       credentials: "include",
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data.message); // Post deleted successfully
-        setPostInfo(null); // 投稿の詳細情報をリセット
-        navigate("/"); // ホーム画面にリダイレクト
+        console.log(data.message); 
+        setPostInfo(null); 
+        navigate("/"); 
       })
       .catch((error) => {
         console.error("Error deleting post:", error);
@@ -68,7 +68,7 @@ const PostDetail = () => {
   const handleCommentSubmit = (e) => {
     e.preventDefault();
 
-    fetch(`http://localhost:5000/post/${id}/comments`, {
+    fetch(`https://mern-blog-backend-nu.vercel.app/post/${id}/comments`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -82,7 +82,7 @@ const PostDetail = () => {
         setCommentContent(""); 
 
       
-        fetch(`http://localhost:5000/post/${id}/comments`)
+        fetch(`https://mern-blog-backend-nu.vercel.app/post/${id}/comments`)
           .then((res) => {
             if (res.ok) {
               return res.json();
@@ -105,7 +105,7 @@ const PostDetail = () => {
 
 
   const handleLike = () => {
-    fetch(`http://localhost:5000/post/${id}/like`, {
+    fetch(`https://mern-blog-backend-nu.vercel.app/post/${id}/like`, {
       method: "POST",
       credentials: "include",
     })
@@ -143,7 +143,7 @@ const PostDetail = () => {
     <div className="w-full md:flex mt-8 gap-5 mb-10">
       <div className="md:w-3/4">
         <img
-          src={`http://localhost:5000/${postInfo.cover}`}
+          src={`https://mern-blog-backend-nu.vercel.app/${postInfo.cover}`}
           alt=""
           className="w-full h-[300px] object-cover mb-3"
         />
