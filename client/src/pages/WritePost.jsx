@@ -20,7 +20,7 @@ const WritePost = () => {
     data.set('file',files[0]);
 
     e.preventDefault()
-    const result = await fetch('http://localhost:5000/post',{
+    const result = await fetch('https://mern-blog-backend-nu.vercel.app/post',{
       method:'POST',
       body: data,
       credentials: 'include',

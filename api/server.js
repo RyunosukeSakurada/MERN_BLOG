@@ -16,7 +16,7 @@ require("dotenv").config();
 const salt = bcrypt.genSaltSync(10);
 const secret = 'afe24t24g9bub';
 
-app.use(cors({credentials:true, origin:'http://localhost:5173'}));
+app.use(cors({credentials:true, origin:'https://mern-blog-frontend-ruby.vercel.app/'}));
 app.use(express.json());
 app.use(cookieParser());
 app.use('/uploads', express.static(__dirname + '/uploads'));
@@ -92,7 +92,6 @@ app.post('/logout', (req,res) => {
 // write a post
 app.post('/post', upload.single('file'), async (req, res) => {
   if (!req.file) {
-    // ファイルがアップロードされていない場合の処理
     return res.status(400).json({ error: 'No file uploaded' });
   }
 
@@ -168,7 +167,6 @@ app.delete('/post/:id', async (req, res) => {
       return res.status(404).json({ error: 'Post not found' });
     }
 
-    // ポストが存在する場合は、削除します
     await postDoc.deleteOne();
 
     res.json({ message: 'Post deleted successfully' });

@@ -5,7 +5,7 @@ const PostList = () => {
   const [posts, setPosts] = useState([]);
 
   useEffect(() => {
-    fetch('http://localhost:5000/post')
+    fetch('https://mern-blog-backend-nu.vercel.app/post')
       .then(res => res.json())
       .then(posts => {
         setPosts(posts);
