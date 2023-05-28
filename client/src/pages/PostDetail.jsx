@@ -15,7 +15,7 @@ const PostDetail = () => {
   const [likes, setLikes] = useState(0);
 
   useEffect(() => {
-    fetch(`https://mern-blog-backend-nu.vercel.app/post/${id}`)
+    fetch(`http://localhost:5000/post/${id}`)
       .then((res) => {
         if (res.ok) {
           return res.json();
@@ -31,7 +31,7 @@ const PostDetail = () => {
         console.error("Error retrieving post:", error);
       });
 
-    fetch(`https://mern-blog-backend-nu.vercel.app/post/${id}/comments`)
+    fetch(`http://localhost:5000/post/${id}/comments`)
       .then((res) => {
         if (res.ok) {
           return res.json();
@@ -50,7 +50,7 @@ const PostDetail = () => {
   }, [id]);
 
   const handleDelete = () => {
-    fetch(`https://mern-blog-backend-nu.vercel.app/post/${id}`, {
+    fetch(`http://localhost:5000/post/${id}`, {
       method: "DELETE",
       credentials: "include",
     })
@@ -68,7 +68,7 @@ const PostDetail = () => {
   const handleCommentSubmit = (e) => {
     e.preventDefault();
 
-    fetch(`https://mern-blog-backend-nu.vercel.app/post/${id}/comments`, {
+    fetch(`http://localhost:5000/post/${id}/comments`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -82,7 +82,7 @@ const PostDetail = () => {
         setCommentContent(""); 
 
       
-        fetch(`https://mern-blog-backend-nu.vercel.app/post/${id}/comments`)
+        fetch(`http://localhost:5000/post/${id}/comments`)
           .then((res) => {
             if (res.ok) {
               return res.json();
@@ -105,7 +105,7 @@ const PostDetail = () => {
 
 
   const handleLike = () => {
-    fetch(`https://mern-blog-backend-nu.vercel.app/post/${id}/like`, {
+    fetch(`http://localhost:5000/post/${id}/like`, {
       method: "POST",
       credentials: "include",
     })
@@ -134,7 +134,7 @@ const PostDetail = () => {
       <div className="flex justify-center items-center h-screen text-3xl">
         Loading...
       </div>
-    ); // ローディングスピナーなどの表示
+    ); 
   }
 
   const email = userInfo?.email;
@@ -143,7 +143,7 @@ const PostDetail = () => {
     <div className="w-full md:flex mt-8 gap-5 mb-10">
       <div className="md:w-3/4">
         <img
-          src={`https://mern-blog-backend-nu.vercel.app/${postInfo.cover}`}
+          src={`http://localhost:5000/${postInfo.cover}`}
           alt=""
           className="w-full h-[300px] object-cover mb-3"
         />

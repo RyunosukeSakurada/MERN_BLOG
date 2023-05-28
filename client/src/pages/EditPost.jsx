@@ -11,7 +11,7 @@ export default function EditPost() {
   const [redirect,setRedirect] = useState(false);
 
   useEffect(() => {
-    fetch('https://mern-blog-backend-nu.vercel.app/post/'+id)
+    fetch('http://localhost:5000/post/'+id)
       .then(result => {
         result.json().then(postInfo => {
           setTitle(postInfo.title);
@@ -31,7 +31,7 @@ export default function EditPost() {
     if(files?.[0]){
       data.set('file', files?.[0]);
     }
-    const result = await fetch('https://mern-blog-backend-nu.vercel.app/post', {
+    const result = await fetch('http://localhost:5000/post', {
       method: 'PUT',
       body: data,
       credentials: 'include',

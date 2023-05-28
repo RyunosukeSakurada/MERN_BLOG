@@ -9,7 +9,7 @@ const Signup = () => {
 
   async function signup(e){
     e.preventDefault();
-    const result = await fetch('https://mern-blog-backend-nu.vercel.app/signup',{
+    const result = await fetch('http://localhost:5000/signup',{
       method: 'POST',
       body: JSON.stringify({username,email,password}),
       headers: {'Content-Type' : 'application/json'},
