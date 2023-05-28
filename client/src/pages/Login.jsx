@@ -6,21 +6,21 @@ import { UserContext } from "../context/UserContext";
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [redirect, setRedirect] = useState(false)
-  const {setUserInfo} = useContext(UserContext)
+  const [redirect, setRedirect] = useState(false); 
+  const {setUserInfo} = useContext(UserContext); 
 
   async function login(e){
     e.preventDefault();
     const result = await fetch('http://localhost:5000/login',{
       method:'POST',
-      body:JSON.stringify({email,password}),
-      headers:{'Content-Type':'application/json'},
-      credentials: 'include',
+      body:JSON.stringify({email,password}), 
+      headers:{'Content-Type':'application/json'}, 
+      credentials: 'include', 
     })
     if(result.ok){
-      result.json().then(userInfo => {
-        setUserInfo(userInfo);
-        setRedirect(true);
+      result.json().then(userInfo => { 
+        setUserInfo(userInfo); 
+        setRedirect(true); 
       })
     }else{
       alert("Wrong Credentials");
@@ -62,14 +62,14 @@ const Login = () => {
               placeholder="email@example.com"
               className="w-full bg-transparent border-b border-black outline-none focus:outline-none py-2 my-4"
               value={email}
-              onChange={e => setEmail(e.target.value)}
+              onChange={e => setEmail(e.target.value)} 
             />
             <input 
               type="password"
               placeholder="enter your password"
               className="w-full bg-transparent border-b border-black outline-none focus:outline-none py-2 my-4"
               value={password}
-              onChange={e => setPassword(e.target.value)}
+              onChange={e => setPassword(e.target.value)} 
             />
 
             <div className="w-full flex items-center mb-8">

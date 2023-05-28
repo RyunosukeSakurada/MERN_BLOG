@@ -29,7 +29,7 @@ mongoose.connect(process.env.MONGO_URL)
 })
 
 
-//sign up api
+//Signup API
 app.post('/signup', async (req,res) => {
   const {username, email, password} = req.body;
   try {
@@ -46,7 +46,7 @@ app.post('/signup', async (req,res) => {
 });
 
 
-//login api
+//Login API
 app.post('/login', async (req,res) => {
   const {email, password} = req.body;
   const userDoc = await User.findOne({ email });

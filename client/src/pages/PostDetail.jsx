@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { formatISO9075 } from "date-fns";
 import { UserContext } from "../context/UserContext";
-import { AiOutlineHeart, AiOutlineSend , AiFillHeart} from "react-icons/ai";
+import { AiOutlineHeart, AiOutlineSend , AiFillHeart, AiOutlineArrowLeft} from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
 
 const PostDetail = () => {
@@ -36,7 +36,7 @@ const PostDetail = () => {
         if (res.ok) {
           return res.json();
         } else if (res.status === 404) {
-          return []; // コメントが見つからない場合は空の配列をセット
+          return []; 
         } else {
           throw new Error("Failed to retrieve comments");
         }
@@ -79,9 +79,9 @@ const PostDetail = () => {
       .then((res) => res.json())
       .then((data) => {
         console.log("Comment created:", data);
-        setCommentContent(""); // コメント投稿後、入力値をリセットする
+        setCommentContent(""); 
 
-        // コメント投稿後にコメントリストを再取得する
+      
         fetch(`http://localhost:5000/post/${id}/comments`)
           .then((res) => {
             if (res.ok) {
@@ -190,6 +190,12 @@ const PostDetail = () => {
           className="break-words"
           dangerouslySetInnerHTML={{ __html: postInfo.content }}
         />
+        <Link to={"/"}>
+          <div className="flex items-center gap-x-1 mt-8 hover:text-amber-500">
+            <AiOutlineArrowLeft />
+            <p className="font-md">Back to HOME</p>
+          </div>
+        </Link>
       </div>
       <div className="md:w-1/4 p-2 border rounded">
         <p className="font-bold">
