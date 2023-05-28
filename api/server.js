@@ -16,7 +16,7 @@ require("dotenv").config();
 const salt = bcrypt.genSaltSync(10);
 const secret = 'afe24t24g9bub';
 
-app.use(cors({credentials:true, origin:'https://mern-blog-frontend-ruby.vercel.app/'}));
+app.use(cors({credentials:true, origin:'http://localhost:5173/'}));
 app.use(express.json());
 app.use(cookieParser());
 app.use('/uploads', express.static(__dirname + '/uploads'));
@@ -267,14 +267,11 @@ app.post('/post/:id/like', async (req, res) => {
         return res.status(404).json({ error: 'Post not found' });
       }
 
-      // 既にユーザーがいいねしているか確認する
       const userLiked = postDoc.likes.some((userId) => userId.equals(info.id));
 
       if (userLiked) {
-        // 既にいいねしている場合は、いいねを取り消す
         postDoc.likes.pull(info.id);
       } else {
-        // いいねを追加する
         postDoc.likes.push(info.id);
       }
 
