@@ -16,7 +16,7 @@ require("dotenv").config();
 const salt = bcrypt.genSaltSync(10);
 const secret = 'afe24t24g9bub';
 
-app.use(cors({credentials:true, origin:'http://localhost:5173/'}));
+app.use(cors({credentials:true, origin:'http://localhost:5173'}));
 app.use(express.json());
 app.use(cookieParser());
 app.use('/uploads', express.static(__dirname + '/uploads'));
@@ -156,7 +156,7 @@ app.put('/post', upload.single('file'), async (req, res) => {
   });
 });
 
-
+//delete api
 app.delete('/post/:id', async (req, res) => {
   const { id } = req.params;
 
@@ -197,7 +197,7 @@ app.delete('/post/:id', async (req, res) => {
   })
 
 
-
+  //post a comment
   app.post('/post/:id/comments', async (req, res) => {
     const { id } = req.params;
     const { token } = req.cookies;

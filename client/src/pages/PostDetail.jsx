@@ -73,7 +73,7 @@ const PostDetail = () => {
       headers: {
         "Content-Type": "application/json",
       },
-      credentials: "include",
+      credentials: "include", 
       body: JSON.stringify({ content: commentContent }),
     })
       .then((res) => res.json())

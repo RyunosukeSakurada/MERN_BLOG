@@ -17,7 +17,7 @@ const WritePost = () => {
     data.set('title', title);
     data.set('summary', summary);
     data.set('content', content);
-    data.set('file',files[0]);
+    data.set('file',files[0]); 
 
     e.preventDefault()
     const result = await fetch('http://localhost:5000/post',{
